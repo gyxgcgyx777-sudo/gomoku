@@ -4,22 +4,6 @@ const players = {
   black: { name: "黑棋", next: "white" },
   white: { name: "白棋", next: "black" },
 };
-const mobileDesignWidth = 750;
-const defaultViewport = "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover";
-const mobileViewport = `width=${mobileDesignWidth}, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover`;
-
-function syncViewportMeta() {
-  const viewportMeta = document.getElementById("viewportMeta");
-  if (!viewportMeta) return;
-
-  const screenWidth = Math.min(
-    window.screen?.width || window.innerWidth,
-    window.screen?.height || window.innerHeight,
-  );
-  viewportMeta.setAttribute("content", screenWidth < mobileDesignWidth ? mobileViewport : defaultViewport);
-}
-
-syncViewportMeta();
 
 const appState = {
   screen: "home",
@@ -38,6 +22,7 @@ const appState = {
 
 const elements = {
   screens: document.querySelectorAll(".screen"),
+  appShell: document.querySelector(".app-shell"),
   boardCanvas: document.getElementById("gomokuBoard"),
   startGameButton: document.getElementById("startGameButton"),
   homeSettingsButton: document.getElementById("homeSettingsButton"),
@@ -62,23 +47,23 @@ const elements = {
 
 const canvasContext = elements.boardCanvas.getContext("2d");
 
+function lockScrollPosition() {
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+  if (window.scrollX || window.scrollY) {
+    window.scrollTo(0, 0);
+  }
+}
+
 function syncViewportSize() {
-  syncViewportMeta();
   const visualViewport = window.visualViewport;
-  const measuredWidth = Math.ceil(visualViewport?.width || window.innerWidth || document.documentElement.clientWidth);
-  const measuredHeight = Math.ceil(visualViewport?.height || window.innerHeight || document.documentElement.clientHeight);
-  const screenWidth = Math.min(
-    window.screen?.width || measuredWidth,
-    window.screen?.height || measuredHeight,
-  );
-  const useMobileDesignWidth = screenWidth < mobileDesignWidth;
-  const width = useMobileDesignWidth ? mobileDesignWidth : measuredWidth;
-  const rawHeight = useMobileDesignWidth ? Math.ceil(measuredHeight * (width / measuredWidth)) : measuredHeight;
+  const width = Math.ceil(visualViewport?.width || window.innerWidth || document.documentElement.clientWidth);
+  const rawHeight = Math.ceil(visualViewport?.height || window.innerHeight || document.documentElement.clientHeight);
   const landscapeHeightCap = width >= 821 ? Math.floor(width * 0.75) : rawHeight;
   const height = Math.min(rawHeight, landscapeHeightCap);
   document.documentElement.style.setProperty("--app-width", `${width}px`);
   document.documentElement.style.setProperty("--app-height", `${height}px`);
-  window.scrollTo(0, 0);
+  lockScrollPosition();
   requestAnimationFrame(resizeBoard);
 }
 
@@ -98,7 +83,7 @@ function resetGame() {
 
 function showScreen(screenName) {
   appState.screen = screenName;
-  window.scrollTo(0, 0);
+  lockScrollPosition();
   elements.screens.forEach((screen) => {
     screen.classList.toggle("active", screen.dataset.screen === screenName);
   });
@@ -147,7 +132,7 @@ function canUndo() {
 
 function handleBoardPointer(event) {
   event.preventDefault();
-  window.scrollTo(0, 0);
+  lockScrollPosition();
 
   if (appState.screen !== "game" || appState.winner) return;
 
@@ -496,6 +481,7 @@ elements.boardCanvas.addEventListener("pointerdown", handleBoardPointer, { passi
 
 document.addEventListener("touchmove", (event) => {
   event.preventDefault();
+  lockScrollPosition();
 }, { passive: false });
 
 document.addEventListener("touchend", (event) => {
@@ -504,6 +490,7 @@ document.addEventListener("touchend", (event) => {
     event.preventDefault();
   }
   appState.lastTouchEnd = now;
+  lockScrollPosition();
 }, { passive: false });
 
 document.addEventListener("gesturestart", (event) => {
@@ -511,10 +498,13 @@ document.addEventListener("gesturestart", (event) => {
 }, { passive: false });
 
 window.addEventListener("scroll", () => {
-  if (window.scrollX || window.scrollY) {
-    window.scrollTo(0, 0);
-  }
+  lockScrollPosition();
 }, { passive: true });
+
+elements.appShell.addEventListener("touchmove", (event) => {
+  event.preventDefault();
+  lockScrollPosition();
+}, { passive: false });
 
 const resizeObserver = new ResizeObserver(resizeBoard);
 resizeObserver.observe(elements.boardCanvas);
