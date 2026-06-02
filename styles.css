@@ -267,12 +267,22 @@ h2 {
 }
 
 .turn-card,
-.stat-item {
+.stat-item,
+.move-hint {
   border-radius: 8px;
   padding: 18px;
   background: rgba(255, 247, 235, 0.78);
   border: 1px solid rgba(82, 45, 21, 0.16);
   box-shadow: 0 12px 30px rgba(61, 34, 15, 0.12);
+}
+
+.move-hint {
+  min-height: 48px;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-size: 18px;
+  font-weight: 800;
 }
 
 .panel-label {
@@ -431,9 +441,14 @@ h2 {
   }
 
   .turn-card,
+  .move-hint,
   .stat-grid,
   .control-stack {
     min-width: 0;
+  }
+
+  .move-hint {
+    min-height: 64px;
   }
 
   .control-stack {
