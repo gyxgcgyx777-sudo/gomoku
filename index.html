@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#9a6537">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="五子棋">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>五子棋</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./assets/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="./styles.css?v=22">
+</head>
+<body>
+  <div class="viewport-bg" aria-hidden="true"></div>
+  <main class="app-shell">
+    <section class="home-screen screen active" data-screen="home" aria-label="主页">
+      <div class="home-card">
+        <div class="brand-mark" aria-hidden="true">
+          <span class="stone black-stone"></span>
+          <span class="stone white-stone"></span>
+        </div>
+        <h1>五子棋</h1>
+        <div class="home-actions">
+          <button class="primary-action" id="startGameButton" type="button">开始对局</button>
+          <button class="secondary-action" id="homeSettingsButton" type="button">设置</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="game-screen screen" data-screen="game" aria-label="对局">
+      <div class="game-layout">
+        <div class="board-stage">
+          <canvas id="gomokuBoard" aria-label="五子棋棋盘"></canvas>
+        </div>
+
+        <aside class="game-panel" aria-label="对局信息">
+          <div class="turn-card">
+            <span class="panel-label">当前回合</span>
+            <div class="turn-line">
+              <span class="turn-stone" id="turnStone" aria-hidden="true"></span>
+              <strong id="turnText">黑棋</strong>
+            </div>
+          </div>
+
+          <div class="stat-grid">
+            <div class="stat-item">
+              <span class="panel-label">步数</span>
+              <strong id="moveCount">0</strong>
+            </div>
+            <div class="stat-item">
+              <span class="panel-label">悔棋</span>
+              <strong><span id="blackUndoLeft">3</span> / <span id="whiteUndoLeft">3</span></strong>
+            </div>
+          </div>
+
+          <div class="control-stack">
+            <button class="panel-button" id="undoButton" type="button">悔棋</button>
+            <button class="panel-button" id="restartButton" type="button">重新开始</button>
+            <button class="panel-button" id="gameSettingsButton" type="button">设置</button>
+            <button class="panel-button quiet-button" id="backHomeButton" type="button">返回主页</button>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="result-screen screen" data-screen="result" aria-label="结算">
+      <div class="result-card">
+        <span class="panel-label">本局结束</span>
+        <h2 id="resultTitle">黑棋获胜</h2>
+        <p id="resultMoves">总步数 0</p>
+        <div class="result-actions">
+          <button class="primary-action" id="playAgainButton" type="button">再来一盘</button>
+          <button class="secondary-action" id="resultHomeButton" type="button">返回主页</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="settings-sheet" id="settingsSheet" aria-hidden="true">
+    <div class="settings-panel" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <div class="sheet-header">
+        <h2 id="settingsTitle">设置</h2>
+        <button class="icon-button" id="closeSettingsButton" type="button" aria-label="关闭设置">×</button>
+      </div>
+      <label class="switch-row">
+        <span>落子提示音</span>
+        <input id="soundToggle" type="checkbox" checked>
+      </label>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="./app.js?v=22"></script>
+</body>
+</html>
