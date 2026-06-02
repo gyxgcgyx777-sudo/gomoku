@@ -25,8 +25,10 @@
 html,
 body {
   width: 100%;
-  min-height: calc(var(--app-height) + 360px);
-  height: auto;
+  max-width: 100%;
+  height: 100%;
+  min-height: 100%;
+  max-height: 100%;
   margin: 0;
   padding: 0;
   overflow: hidden;
@@ -38,8 +40,12 @@ body {
 }
 
 body {
+  position: fixed;
+  inset: 0;
   margin: 0;
-  min-height: calc(var(--app-height) + 360px);
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
   color: var(--ink);
   font-family: "Avenir Next", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   background: var(--app-background);
@@ -83,6 +89,8 @@ button:disabled {
   position: fixed;
   left: 0;
   top: 0;
+  right: 0;
+  bottom: 0;
   z-index: 1;
   width: var(--app-width);
   height: var(--app-height);
@@ -510,7 +518,7 @@ h2 {
 
 @media (max-width: 620px) {
   .app-shell {
-    padding: 14px;
+    padding: max(8px, env(safe-area-inset-top)) 10px max(8px, env(safe-area-inset-bottom));
   }
 
   h1 {
@@ -523,16 +531,74 @@ h2 {
     padding: 24px;
   }
 
-  .game-panel {
-    grid-template-columns: 1fr;
-  }
-
-  .control-stack {
-    grid-template-columns: 1fr 1fr;
+  .game-layout {
+    gap: 8px;
+    padding: 6px 0;
   }
 
   .board-stage {
-    padding: 8px;
+    width: min(100%, calc(var(--app-height) * 0.47));
+    height: min(100%, calc(var(--app-height) * 0.47));
+    padding: 14px;
+  }
+
+  .game-panel {
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .turn-card,
+  .move-hint {
+    grid-column: span 1;
+    min-height: 86px;
+    padding: 12px;
+  }
+
+  .move-hint {
+    font-size: 21px;
+  }
+
+  .turn-line {
+    gap: 10px;
+    font-size: 28px;
+  }
+
+  .turn-stone {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 auto;
+  }
+
+  .panel-label {
+    margin-bottom: 5px;
+    font-size: 18px;
+  }
+
+  .stat-grid {
+    grid-column: 1 / -1;
+    gap: 8px;
+  }
+
+  .stat-item {
+    min-height: 76px;
+    padding: 12px;
+  }
+
+  .stat-item strong {
+    font-size: 30px;
+  }
+
+  .control-stack {
+    grid-column: 1 / -1;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .panel-button {
+    min-height: 48px;
+    padding: 0 10px;
+    font-size: 20px;
   }
 }
 
