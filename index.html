@@ -3,6 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <script>
+    (function () {
+      var mobileDesignWidth = 750;
+      var defaultViewport = "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover";
+      var mobileViewport = "width=750, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover";
+      var viewportMeta = document.getElementById("viewportMeta");
+
+      function syncViewportMeta() {
+        var screenWidth = Math.min(window.screen.width || window.innerWidth, window.screen.height || window.innerHeight);
+        viewportMeta.setAttribute("content", screenWidth < mobileDesignWidth ? mobileViewport : defaultViewport);
+      }
+
+      syncViewportMeta();
+      window.addEventListener("orientationchange", syncViewportMeta);
+    }());
+  </script>
   <meta name="theme-color" content="#9a6537">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="五子棋">
@@ -11,7 +27,7 @@
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" href="./assets/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
-  <link rel="stylesheet" href="./styles.css?v=22">
+  <link rel="stylesheet" href="./styles.css?v=23">
 </head>
 <body>
   <div class="viewport-bg" aria-hidden="true"></div>
